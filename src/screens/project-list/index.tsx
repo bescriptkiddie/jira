@@ -7,12 +7,12 @@ import { useMount, useDebounce } from "utils"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
-interface Users {
+export interface Users {
     name: string
     id: number
 }
 
-interface Lists {
+export interface Lists {
     id: number
     name: string
     personId: number
@@ -25,7 +25,7 @@ export const ProjectList = () => {
     const [lists, setList] = useState<Lists[]>([])
     const [param, setParam] = useState({
         name: "",
-        id: "",
+        personId: "",
     })
     const debounceParam = useDebounce(param, 2000)
 

@@ -1,6 +1,16 @@
 import React from "react"
+import { Users } from "screens/project-list/index"
 
-export const SearchPanel = (props: any) => {
+interface SearchPanelProps {
+    users: Users[]
+    param: {
+        name: string
+        personId: string
+    }
+    setParam: (param: SearchPanelProps["param"]) => void
+}
+
+export const SearchPanel = (props: SearchPanelProps) => {
     const { param, setParam, users } = props
     return (
         <form>
@@ -25,6 +35,7 @@ export const SearchPanel = (props: any) => {
                         })
                     }
                 >
+                    <option value={""}>负责人</option>
                     {users?.map((user: any) => (
                         <option key={user.id} value={user.id}>
                             {user.name}

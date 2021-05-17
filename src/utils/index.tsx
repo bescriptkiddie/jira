@@ -1,12 +1,15 @@
 import { useEffect, useState, useRef } from "react"
 // 清除空元素
-export const cleanObject = (object: any) => {
+export const cleanObject = (object: object) => {
     const result = { ...object }
     // keys -> 属性名呀 知道🔑才能打开箱子拿到value
     Object.keys(result).forEach(key => {
+        //@ts-ignore
         const value = result[key]
         // 当value == 0 的时候也会被误删
         if (isFalsy(value)) {
+            //@ts-ignore
+
             delete result[key]
         }
     })
@@ -17,7 +20,7 @@ export const cleanObject = (object: any) => {
 export const isFalsy = (value: any) => (value === 0 ? false : !value)
 
 // 首次加载,只运行一次  模拟componentDidMount
-export const useMount = (callback: any) => {
+export const useMount = (callback: () => void) => {
     useEffect(() => {
         callback()
     }, [])
@@ -29,7 +32,7 @@ export const useMount = (callback: any) => {
  * 更新过程(依赖数组里的变量):willmount -> 执行useEffect中的返还函数 -> 组件更新 -> useEffect的回调函数
  * 卸载过程:执行useEffect 的返还函数
  */
-export const useDebounce = (value: any, delay: number) => {
+export const useDebounce = (value: any, delay?: number) => {
     const [debouncedValue, setDebouncedValue] = useState(value)
     console.log("value", value)
 

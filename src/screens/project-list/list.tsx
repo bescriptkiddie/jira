@@ -1,5 +1,11 @@
 import React from "react"
-export const List = (props: any) => {
+import { Users, Lists } from "screens/project-list/index"
+
+interface ListProps {
+    lists: Lists[]
+    users: Users[]
+}
+export const List = (props: ListProps) => {
     const { users, lists } = props
     return (
         <table>

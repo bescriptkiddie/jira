@@ -1,6 +1,6 @@
 import React from "react"
 import "./App.css"
-import { ProjectList } from "./screans/project-list"
+import { ProjectList } from "./screens/project-list/index"
 
 function App() {
     return (
