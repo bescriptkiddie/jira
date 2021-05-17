@@ -45,16 +45,16 @@ export const useDebounce = (value: any, delay: number) => {
     return debouncedValue
 }
 
+// 随便把节流给写了,节流 or 防抖都是用来减少请求次数,节流更多用于 加载场景 , 页面滚动
 export const useThrottledEffect = (callback: any, delay: number, deps = []) => {
-    const lastRan = useRef(Date.now())
-    console.log("看看这个throttle", lastRan)
+    const timeFlag = useRef(Date.now())
     useEffect(() => {
         const handler = setTimeout(function () {
-            if (Date.now() - lastRan.current >= delay) {
+            if (Date.now() - timeFlag.current >= delay) {
                 callback()
-                lastRan.current = Date.now()
+                timeFlag.current = Date.now()
             }
-        }, delay - (Date.now() - lastRan.current))
+        }, delay - (Date.now() - timeFlag.current))
 
         return () => {
             clearTimeout(handler)
