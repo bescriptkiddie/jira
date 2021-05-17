@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 // 清除空元素
 export const cleanObject = (object: any) => {
     const result = { ...object }
@@ -44,3 +44,43 @@ export const useDebounce = (value: any, delay: number) => {
 
     return debouncedValue
 }
+
+export const useThrottledEffect = (callback: any, delay: number, deps = []) => {
+    const lastRan = useRef(Date.now())
+    console.log("看看这个throttle", lastRan)
+    useEffect(() => {
+        const handler = setTimeout(function () {
+            if (Date.now() - lastRan.current >= delay) {
+                callback()
+                lastRan.current = Date.now()
+            }
+        }, delay - (Date.now() - lastRan.current))
+
+        return () => {
+            clearTimeout(handler)
+        }
+    }, [delay, ...deps])
+}
+
+// export const useDebouncedEffect = (callback:any, delay:number, deps = []) => {
+//   const data = useRef({ firstTime : true });
+//   useEffect(() => {
+//     const { firstTime, clearFunc } = data.current;
+
+//     if (firstTime) {
+//       data.current.firstTime = false;
+//       return;
+//     }
+
+//     const handler = setTimeout(() => {
+//       if (clearFunc && typeof clearFunc === 'function') {
+//         clearFunc();
+//       }
+//       data.current.clearFunc = callback();
+//     }, delay);
+
+//     return () => {
+//       clearTimeout(handler);
+//     };
+//   },[delay, ...deps]);
+// }
