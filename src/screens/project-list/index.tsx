@@ -1,15 +1,16 @@
 import { SearchPanel } from "./search-panel"
 import { List } from "./list"
 import React, { useEffect, useState } from "react"
-import { cleanObject } from "utils"
 import * as qs from "qs"
-import { useMount, useDebounce } from "utils"
+import { useMount, useDebounce, cleanObject } from "utils"
+import { useHttp } from "utils/http"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
 export interface Users {
   name: string
   id: number
+  token: string
 }
 
 export interface Lists {
@@ -28,25 +29,21 @@ export const ProjectList = () => {
     personId: "",
   })
   const debounceParam = useDebounce(param, 2000)
+  const client = useHttp()
 
   // 请求接口
   useMount(() => {
-    console.log(`${apiUrl}/users`)
-    fetch(`${apiUrl}/users`).then(async response => {
-      if (response.ok) {
-        setUser(await response.json())
-      }
-    })
+    client("users").then(setUser)
+    // console.log(`${apiUrl}/users`)
+    // fetch(`${apiUrl}/users`).then(async response => {
+    //   if (response.ok) {
+    //     setUser(await response.json())
+    //   }
+    // })
   })
 
   useEffect(() => {
-    fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam as object))}`).then(
-      async response => {
-        if (response.ok) {
-          setList(await response.json())
-        }
-      }
-    )
+    client("projects", { data: cleanObject(debounceParam as object) }).then(setList)
   }, [debounceParam])
 
   return (
