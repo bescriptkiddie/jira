@@ -1,7 +1,6 @@
 import qs from "qs"
 import * as auth from "auth-provider"
 import { useAuth } from "context/auth-context"
-import { config } from "process"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -47,6 +46,14 @@ export const http = async (
 
 export const useHttp = () => {
   const { user } = useAuth()
+  // Parameters 是一个工具类型, Utility type => 通过泛型最type or interface进行操作
+  /**
+   * Partial<interface |type> 在维持原类型的情况下,将必选变成可选
+   * type Partial<T> = { [P in keyof T]?: T[P] | undefined; } 遍历了T中的key,然后添加一个?
+   * Omit<interface or type,'其中的属性'|'其中的属性2'> 删除 interfeace 中的某个属性
+   * type Omit<T, K extends string | number | symbol> = { [P in Exclude<keyof T, K>]: T[P]; }
+   * exclude 在 T 中,将 K 变成 never
+   */
   return (...[endpoint, config]: Parameters<typeof http>) =>
     http(endpoint, { ...config, token: user?.token })
 }
