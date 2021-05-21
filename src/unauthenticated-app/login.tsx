@@ -1,28 +1,34 @@
 import React, { FormEvent } from "react"
 import { useAuth } from "context/auth-context"
+import { Button, Form, Input, message } from "antd"
 
 export const LoginScreen = () => {
   const { login, user } = useAuth()
 
-  const handleSubmit = (event: FormEvent<HTMLElement>) => {
-    event.preventDefault()
-    const username = (document.getElementById("username") as HTMLInputElement).value
-    const password = (document.getElementById("password") as HTMLInputElement).value
+  const handleSubmit = (value: any) => {
+    // event.preventDefault()
+    // const username = (document.getElementById("username") as HTMLInputElement).value
+    // const password = (document.getElementById("password") as HTMLInputElement).value
+    const username = value.username
+    const password = value.password
     login({ username, password })
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <Form onFinish={handleSubmit}>
       {user ? <div>logined~~{user?.name}</div> : null}
-      <div>
-        <label htmlFor="username">用户名</label>
-        <input type="text" id="username" />
-      </div>
-      <div>
-        <label htmlFor="password">密码</label>
-        <input type="password" id="password" />
-      </div>
-      <button type="submit">登录</button>
-    </form>
+      <Form.Item name="username" rules={[{ required: true, message: "请输入用户名" }]}>
+        <Input placeholder="用户名" type="text" id="username" />
+      </Form.Item>
+
+      <Form.Item name="password" rules={[{ required: true, message: "请输入密码" }]}>
+        <Input placeholder="密码" type="password" id="password" />
+      </Form.Item>
+      <Form.Item name="button">
+        <Button type="primary" htmlType="submit">
+          登录
+        </Button>
+      </Form.Item>
+    </Form>
   )
 }

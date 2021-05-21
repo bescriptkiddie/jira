@@ -1,11 +1,8 @@
 import { SearchPanel } from "./search-panel"
 import { List } from "./list"
 import React, { useEffect, useState } from "react"
-import * as qs from "qs"
 import { useMount, useDebounce, cleanObject } from "utils"
 import { useHttp } from "utils/http"
-
-const apiUrl = process.env.REACT_APP_API_URL
 
 export interface Users {
   name: string
