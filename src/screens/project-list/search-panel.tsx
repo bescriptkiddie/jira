@@ -14,10 +14,11 @@ interface SearchPanelProps {
 export const SearchPanel = (props: SearchPanelProps) => {
   const { param, setParam, users } = props
   return (
-    <Form>
-      <div style={{ display: "flex" }}>
+    <Form layout={"inline"}>
+      <Form.Item>
         {/* setParam(object.assign({},param,{name:evt.target.name})) */}
         <Input
+          placeholder={"项目名"}
           type="text"
           value={param.name}
           onChange={evt =>
@@ -27,6 +28,8 @@ export const SearchPanel = (props: SearchPanelProps) => {
             })
           }
         />
+      </Form.Item>
+      <Form.Item>
         <Select
           value={param.personId}
           onChange={value =>
@@ -38,12 +41,12 @@ export const SearchPanel = (props: SearchPanelProps) => {
         >
           <Select.Option value={""}>负责人</Select.Option>
           {users?.map((user: any) => (
-            <option key={user.id} value={user.id}>
+            <Select.Option key={user.id} value={user.id}>
               {user.name}
-            </option>
+            </Select.Option>
           ))}
         </Select>
-      </div>
+      </Form.Item>
     </Form>
   )
 }

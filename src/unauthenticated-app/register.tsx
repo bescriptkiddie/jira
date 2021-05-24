@@ -4,7 +4,7 @@ import { Form, Input } from "antd"
 import { LongButton } from "unauthenticated-app"
 
 export const RegisterScreen = () => {
-  const { register, user } = useAuth()
+  const { register } = useAuth()
 
   const handleSubmit = (value: any) => {
     // event.preventDefault()

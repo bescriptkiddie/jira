@@ -3,6 +3,7 @@ import { List } from "./list"
 import React, { useEffect, useState } from "react"
 import { useMount, useDebounce, cleanObject } from "utils"
 import { useHttp } from "utils/http"
+import styled from "@emotion/styled"
 
 export interface Users {
   name: string
@@ -25,7 +26,7 @@ export const ProjectList = () => {
     name: "",
     personId: "",
   })
-  const debounceParam = useDebounce(param, 2000)
+  const debounceParam: any = useDebounce(param, 2000)
   const client = useHttp()
 
   // 请求接口
@@ -40,13 +41,18 @@ export const ProjectList = () => {
   })
 
   useEffect(() => {
-    client("projects", { data: cleanObject(debounceParam as object) }).then(setList)
+    client("projects", { data: cleanObject(debounceParam) }).then(setList)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceParam])
 
   return (
-    <div>
+    <Container>
       <SearchPanel param={param} setParam={setParam} users={users} />
       <List lists={lists} users={users} />
-    </div>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  padding: 3.2rem;
+`
