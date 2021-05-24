@@ -1,16 +1,13 @@
-import { Table } from "antd"
+import { Table, TableProps } from "antd"
 import React from "react"
-import { Users, Lists } from "screens/project-list/index"
+import { Users, Projects } from "screens/project-list/index"
 import dayjs from "dayjs"
 
-interface ListProps {
-  lists: Lists[]
+interface ListProps extends TableProps<Projects> {
   users: Users[]
 }
 
-export const List = (props: ListProps) => {
-  const { users, lists } = props
-  console.log("users", users, "lists", lists)
+export const List = ({ users, ...props }: ListProps) => {
   return (
     <Table
       pagination={false}
@@ -29,21 +26,25 @@ export const List = (props: ListProps) => {
         {
           title: "负责人",
           key: "personId",
-          render: (lists: Lists) => {
+          render: (projects: Projects) => {
             return (
-              <span>{users.find((user: Users) => user.id === lists.personId)?.name || "无"}</span>
+              <span>
+                {users.find((user: Users) => user.id === projects.personId)?.name || "无"}
+              </span>
             )
           },
         },
         {
           title: "创建事件",
           key: "created",
-          render: (lists: Lists) => {
-            return <span>{lists.created ? dayjs(lists.created).format("YYYY-MM-DD") : "无"}</span>
+          render: (projects: Projects) => {
+            return (
+              <span>{projects.created ? dayjs(projects.created).format("YYYY-MM-DD") : "无"}</span>
+            )
           },
         },
       ]}
-      dataSource={lists}
+      {...props}
     ></Table>
   )
 }

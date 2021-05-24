@@ -1,9 +1,11 @@
 import { SearchPanel } from "./search-panel"
 import { List } from "./list"
-import React, { useEffect, useState } from "react"
-import { useMount, useDebounce, cleanObject } from "utils"
-import { useHttp } from "utils/http"
+import React, { useState } from "react"
+import { useDebounce } from "utils"
 import styled from "@emotion/styled"
+import { useProjects } from "utils/project"
+import { useUsers } from "utils/user"
+import { Typography } from "antd"
 
 export interface Users {
   name: string
@@ -11,7 +13,7 @@ export interface Users {
   token: string
 }
 
-export interface Lists {
+export interface Projects {
   id: number
   name: string
   personId: number
@@ -20,35 +22,19 @@ export interface Lists {
 }
 
 export const ProjectList = () => {
-  const [users, setUser] = useState<Users[]>([])
-  const [lists, setList] = useState<Lists[]>([])
   const [param, setParam] = useState({
     name: "",
     personId: "",
   })
-  const debounceParam: any = useDebounce(param, 2000)
-  const client = useHttp()
-
-  // 请求接口
-  useMount(() => {
-    client("users").then(setUser)
-    // console.log(`${apiUrl}/users`)
-    // fetch(`${apiUrl}/users`).then(async response => {
-    //   if (response.ok) {
-    //     setUser(await response.json())
-    //   }
-    // })
-  })
-
-  useEffect(() => {
-    client("projects", { data: cleanObject(debounceParam) }).then(setList)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounceParam])
+  const debounceParam: any = useDebounce(param, 200)
+  const { isLoading, error, data: projects } = useProjects(debounceParam)
+  const { data: users } = useUsers()
 
   return (
     <Container>
-      <SearchPanel param={param} setParam={setParam} users={users} />
-      <List lists={lists} users={users} />
+      <SearchPanel users={users || []} param={param} setParam={setParam} />
+      {error ? <Typography.Text type="danger">{error.message}</Typography.Text> : null}
+      <List loading={isLoading} users={users || []} dataSource={projects || []} />
     </Container>
   )
 }
