@@ -11,8 +11,12 @@ const defaultInitialState: State<null> = {
   data: null,
   error: null,
 }
+const defaultConfig = {
+  throwOnError: false,
+}
 
-export const useAsync = <D>(initialState?: State<D>) => {
+export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defaultConfig) => {
+  const config = { ...defaultConfig, ...initialConfig }
   const [state, setState] = useState<State<D>>({
     ...defaultInitialState,
     ...initialState,
@@ -32,6 +36,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
     })
 
   const run = (promise: Promise<D>) => {
+    console.log("config", config)
     if (!promise || !promise.then) {
       throw new Error("请传入Promise")
     }
@@ -42,7 +47,9 @@ export const useAsync = <D>(initialState?: State<D>) => {
         return data
       })
       .catch(error => {
+        // catch 会消化异常,如果不主动抛出,外面是接收不到异常的
         setError(error)
+        if (config.throwOnError) return Promise.reject(error)
         return error
       })
   }
