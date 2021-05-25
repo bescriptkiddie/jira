@@ -76,6 +76,42 @@ export const useThrottledEffect = (callback: any, delay: number, args = []) => {
   }, [delay, ...args])
 }
 
+// 管理数组的hooks
+export const useArray = <T>(initialArray: T[]) => {
+  const [value, setValue] = useState(initialArray)
+  return {
+    value,
+    setValue,
+    add: (item: T) => setValue([...value, item]),
+    clearTimeout: () => setValue([]),
+    removeIndex: (index: number) => {
+      const copy = [...value]
+      copy.splice(index, 1)
+      setValue(copy)
+    },
+  }
+}
+
+/**
+ *
+ * @param title
+ * @param keepOnUnmount 是否保留卸载之前的title
+ */
+export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) => {
+  const oldTitle = document.title
+
+  useEffect(() => {
+    document.title = title
+  }, [title])
+
+  useEffect(() => {
+    return () => {
+      if (!keepOnUnmount) {
+        document.title = oldTitle
+      }
+    }
+  }, [])
+}
 // export const useDebouncedEffect = (callback:any, delay:number, deps = []) => {
 //   const data = useRef({ firstTime : true });
 //   useEffect(() => {
