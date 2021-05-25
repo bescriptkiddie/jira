@@ -98,7 +98,8 @@ export const useArray = <T>(initialArray: T[]) => {
  * @param keepOnUnmount 是否保留卸载之前的title
  */
 export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) => {
-  const oldTitle = document.title
+  // useRef 相当于一个容器,保存在里面的数据在整个生命周期不会发生改变
+  const oldTitle = useRef(document.title).current
 
   useEffect(() => {
     document.title = title
@@ -110,7 +111,7 @@ export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) =
         document.title = oldTitle
       }
     }
-  }, [])
+  }, [keepOnUnmount, oldTitle])
 }
 // export const useDebouncedEffect = (callback:any, delay:number, deps = []) => {
 //   const data = useRef({ firstTime : true });
