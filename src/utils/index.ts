@@ -113,6 +113,8 @@ export const useDocumentTitle = (title: string, keepOnUnmount: boolean = true) =
     }
   }, [keepOnUnmount, oldTitle])
 }
+
+export const resetRoute = () => (window.location.href = window.location.origin)
 // export const useDebouncedEffect = (callback:any, delay:number, deps = []) => {
 //   const data = useRef({ firstTime : true });
 //   useEffect(() => {

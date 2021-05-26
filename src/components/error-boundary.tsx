@@ -1,5 +1,5 @@
 import { error } from "console"
-import React, { ReactNode } from "react"
+import React from "react"
 
 /**
  * 在React.Component中,需要传入的两个参数,一个是props,一个是state
