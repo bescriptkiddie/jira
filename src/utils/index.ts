@@ -43,7 +43,7 @@ export const useMount = (callback: () => void) => {
  * 更新过程(依赖数组里的变量):willmount -> 执行useEffect中的返还函数 -> 组件更新 -> useEffect的回调函数
  * 卸载过程:执行useEffect 的返还函数
  */
-export const useDebounce = (value: unknown, delay?: number) => {
+export const useDebounce = (value: any, delay?: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value)
 
   useEffect(() => {

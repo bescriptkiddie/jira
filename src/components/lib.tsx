@@ -38,3 +38,6 @@ export const FullPageErrorFallback = ({ error }: { error: Error | null }) => {
     </FullPage>
   )
 }
+
+// Select 中格式化 value值
+export const toNumber = (value: unknown) => (isNaN(Number(value)) ? 0 : Number(value))

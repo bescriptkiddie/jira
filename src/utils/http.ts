@@ -1,6 +1,7 @@
 import qs from "qs"
 import * as auth from "auth-provider"
 import { useAuth } from "context/auth-context"
+import { useCallback } from "react"
 
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -54,6 +55,9 @@ export const useHttp = () => {
    * type Omit<T, K extends string | number | symbol> = { [P in Exclude<keyof T, K>]: T[P]; }
    * exclude 在 T 中,将 K 变成 never
    */
-  return (...[endpoint, config]: Parameters<typeof http>) =>
-    http(endpoint, { ...config, token: user?.token })
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof http>) =>
+      http(endpoint, { ...config, token: user?.token }),
+    [user?.token]
+  )
 }

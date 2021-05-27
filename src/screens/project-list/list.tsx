@@ -3,17 +3,30 @@ import React from "react"
 import { Users, Projects } from "screens/project-list/index"
 import dayjs from "dayjs"
 import { Link } from "react-router-dom"
+import { Star } from "components/stars"
+import { useEidtProject } from "utils/project"
 
 interface ListProps extends TableProps<Projects> {
   users: Users[]
 }
 
 export const List = ({ users, ...props }: ListProps) => {
+  const { mutate } = useEidtProject()
+  const starProject = (id: number) => (pin: boolean) => {
+    mutate({ id, pin })
+  }
+
   return (
     <Table
       rowKey={"id"}
       pagination={false}
       columns={[
+        {
+          title: <Star checked={true} disabled={true} />,
+          render: (projects: Projects) => {
+            return <Star checked={projects.pin} onCheckChange={starProject(projects.id)} />
+          },
+        },
         {
           title: "名称",
           sorter: (a, b) => a.name.localeCompare(b.name),

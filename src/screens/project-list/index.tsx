@@ -1,12 +1,11 @@
 import { SearchPanel } from "./search-panel"
 import { List } from "./list"
-import React, { useState } from "react"
 import { useDebounce, useDocumentTitle } from "utils"
 import styled from "@emotion/styled"
 import { useProjects } from "utils/project"
 import { useUsers } from "utils/user"
-import { Typography } from "antd"
-import { useUrlQueryParams } from "utils/url"
+import { Typography, Divider } from "antd"
+import { useProjectsParams } from "./util"
 
 export interface Users {
   name: string
@@ -20,21 +19,21 @@ export interface Projects {
   personId: number
   organization: string
   created: number
+  pin: boolean
 }
 
 export const ProjectList = () => {
-  const [param, setParam] = useUrlQueryParams(["name", "personId"])
-  // 这里的时候,更多地希望,传入的是固定的键值  -> 所以需要对 useUrlQueryParams 进行约束
-  // setParam({ username: "pika" })
-  const debounceParam: any = useDebounce(param, 200)
-  const { isLoading, error, data: projects } = useProjects(debounceParam)
+  useDocumentTitle("项目管理")
+
+  const [param, setParam] = useProjectsParams()
+  const { isLoading, error, data: projects } = useProjects(useDebounce(param, 200))
   const { data: users } = useUsers()
 
-  useDocumentTitle("项目管理")
   return (
     <Container>
       <SearchPanel users={users || []} param={param} setParam={setParam} />
       {error ? <Typography.Text type="danger">{error.message}</Typography.Text> : null}
+      <Divider />
       <List loading={isLoading} users={users || []} dataSource={projects || []} />
     </Container>
   )
