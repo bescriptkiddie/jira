@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useMountedRef } from "utils"
 
 interface State<D> {
   error: Error | null
@@ -22,6 +23,7 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     ...initialState,
   })
 
+  const mountedRef = useMountedRef()
   const setData = (data: D) =>
     setState({
       data,
@@ -36,14 +38,13 @@ export const useAsync = <D>(initialState?: State<D>, initialConfig?: typeof defa
     })
 
   const run = (promise: Promise<D>) => {
-    console.log("config", config)
     if (!promise || !promise.then) {
       throw new Error("请传入Promise")
     }
     setState({ ...state, stat: "loading" })
     return promise
       .then(data => {
-        setData(data)
+        if (mountedRef.current) setData(data)
         return data
       })
       .catch(error => {
