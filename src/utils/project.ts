@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { Projects } from "screens/project-list"
 import { cleanObject } from "utils"
 import { useHttp } from "./http"
@@ -8,10 +8,15 @@ export const useProjects = (param?: Partial<Projects>) => {
   const http = useHttp()
   const { run, ...res } = useAsync<Projects[]>()
 
+  const fetchProject = useCallback(
+    () => http("projects", { data: cleanObject(param || {}) }),
+    [http, param]
+  )
+
   useEffect(() => {
-    run(http("projects", { data: cleanObject(param || {}) }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [param])
+    run(fetchProject())
+  }, [param, run, fetchProject])
+
   return res
 }
 
@@ -33,19 +38,19 @@ export const useEidtProject = () => {
   }
 }
 
-export const useAddProject = () => {
-  const { run, ...asyncResults } = useAsync()
-  const client = useHttp()
-  const mutate = (params: Partial<Projects>) => {
-    return run(
-      client(`projects/${params.id}`, {
-        data: params,
-        method: "POST",
-      })
-    )
-  }
-  return {
-    mutate,
-    ...asyncResults,
-  }
-}
+// export const useAddProject = () => {
+//   const { run, ...asyncResults } = useAsync()
+//   const client = useHttp()
+//   const mutate = (params: Partial<Projects>) => {
+//     return run(
+//       client(`projects/${params.id}`, {
+//         data: params,
+//         method: "POST",
+//       })
+//     )
+//   }
+//   return {
+//     mutate,
+//     ...asyncResults,
+//   }
+// }
