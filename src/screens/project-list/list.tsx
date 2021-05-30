@@ -1,4 +1,4 @@
-import { Table, TableProps } from "antd"
+import { Dropdown, Menu, Table, TableProps } from "antd"
 import React from "react"
 import { Users, Projects } from "screens/project-list/index"
 import dayjs from "dayjs"
@@ -8,6 +8,7 @@ import { useEidtProject } from "utils/project"
 
 interface ListProps extends TableProps<Projects> {
   users: Users[]
+  setProjectModalOpen?: (isOpen: boolean) => void
 }
 
 export const List = ({ users, ...props }: ListProps) => {
@@ -56,6 +57,24 @@ export const List = ({ users, ...props }: ListProps) => {
           render: (projects: Projects) => {
             return (
               <span>{projects.created ? dayjs(projects.created).format("YYYY-MM-DD") : "无"}</span>
+            )
+          },
+        },
+        {
+          render: () => {
+            return (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key={"layout"}>
+                      {/* <span onClick={() => props.setProjectModalOpen}>新建</span> */}
+                      <span onClick={() => props.setProjectModalOpen?.(true)}>编辑</span>
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <span>...</span>
+              </Dropdown>
             )
           },
         },

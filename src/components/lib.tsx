@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 import React from "react"
-import { Spin, Typography } from "antd"
+import { Button, Spin, Typography } from "antd"
 import { DevTools } from "jira-dev-tool"
 
 export const Row = styled.div<{
@@ -41,3 +41,8 @@ export const FullPageErrorFallback = ({ error }: { error: Error | null }) => {
 
 // Select 中格式化 value值
 export const toNumber = (value: unknown) => (isNaN(Number(value)) ? 0 : Number(value))
+
+// 没有 padding 的 button
+export const ButtonNoPadding = styled(Button)`
+  padding: 0px;
+`

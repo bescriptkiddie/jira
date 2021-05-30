@@ -4,8 +4,9 @@ import { useDebounce, useDocumentTitle } from "utils"
 import styled from "@emotion/styled"
 import { useProjects } from "utils/project"
 import { useUsers } from "utils/user"
-import { Typography, Divider } from "antd"
+import { Typography, Divider, Button } from "antd"
 import { useProjectsParams } from "./util"
+import { Row } from "components/lib"
 
 export interface Users {
   name: string
@@ -22,7 +23,7 @@ export interface Projects {
   pin: boolean
 }
 
-export const ProjectList = () => {
+export const ProjectList = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
   useDocumentTitle("项目管理")
 
   const [param, setParam] = useProjectsParams()
@@ -31,10 +32,19 @@ export const ProjectList = () => {
 
   return (
     <Container>
+      <Row between={true}>
+        <h1>项目列表</h1>
+        <Button onClick={() => props.setProjectModalOpen(true)}>创建项目</Button>
+      </Row>
       <SearchPanel users={users || []} param={param} setParam={setParam} />
       {error ? <Typography.Text type="danger">{error.message}</Typography.Text> : null}
       <Divider />
-      <List loading={isLoading} users={users || []} dataSource={projects || []} />
+      <List
+        loading={isLoading}
+        users={users || []}
+        dataSource={projects || []}
+        setProjectModalOpen={props.setProjectModalOpen}
+      />
     </Container>
   )
 }

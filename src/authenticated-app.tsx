@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { ProjectList } from "screens/project-list"
 import { Projects } from "screens/project"
 import { useAuth } from "context/auth-context"
@@ -9,25 +9,36 @@ import { Button, Dropdown, Menu } from "antd"
 import { BrowserRouter as Router } from "react-router-dom"
 import { Navigate, Route, Routes } from "react-router"
 import { resetRoute } from "utils"
+import { ProjectModal } from "components/project-modal"
+import { ProjectPopover } from "components/project-popover"
 
 export const AuthenticationApp = () => {
+  const [projectModalOpen, setProjectModalOpen] = useState(false)
+
   return (
     <Container>
-      <HeaderPage />
+      <HeaderPage setProjectModalOpen={setProjectModalOpen} />
       <Main>
         <Router>
           <Routes>
-            <Route path="/projects" element={<ProjectList />} />
+            <Route
+              path="/projects"
+              element={<ProjectList setProjectModalOpen={setProjectModalOpen} />}
+            />
             <Route path="/projects/:projectId/*" element={<Projects />} />
             <Navigate to={`/projects`} />
           </Routes>
         </Router>
       </Main>
+      <ProjectModal
+        onClose={() => setProjectModalOpen(false)}
+        projectModalOpen={projectModalOpen}
+      ></ProjectModal>
     </Container>
   )
 }
 
-const HeaderPage = () => {
+const HeaderPage = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
   const { logout, user } = useAuth()
   return (
     <Header between={true}>
@@ -35,7 +46,7 @@ const HeaderPage = () => {
         <Button type="link" onClick={resetRoute}>
           <SoftWareLogo width="18rem" color="rgb(38,132,255)" />
         </Button>
-        <h2>项目</h2>
+        <ProjectPopover setProjectModalOpen={props.setProjectModalOpen} />
         <h2>用户</h2>
       </HeaderLeft>
       <HeaderRight>
