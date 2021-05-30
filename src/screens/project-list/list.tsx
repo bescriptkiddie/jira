@@ -61,6 +61,7 @@ export const List = ({ users, ...props }: ListProps) => {
           },
         },
         {
+          title: "操作",
           render: () => {
             return (
               <Dropdown
