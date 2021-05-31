@@ -7,6 +7,8 @@ import { useUsers } from "utils/user"
 import { Typography, Divider, Button } from "antd"
 import { useProjectsParams } from "./util"
 import { Row } from "components/lib"
+import { useDispatch } from "react-redux"
+import { projectListActions } from "screens/project-list/project-list.slice"
 
 export interface Users {
   name: string
@@ -23,9 +25,10 @@ export interface Projects {
   pin: boolean
 }
 
-export const ProjectList = (props: { setProjectModalOpen: (isOpen: boolean) => void }) => {
+export const ProjectList = () => {
   useDocumentTitle("项目管理")
 
+  const dispatch = useDispatch()
   const [param, setParam] = useProjectsParams()
   const { isLoading, error, data: projects } = useProjects(useDebounce(param, 200))
   const { data: users } = useUsers()
@@ -34,17 +37,12 @@ export const ProjectList = (props: { setProjectModalOpen: (isOpen: boolean) => v
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        <Button onClick={() => props.setProjectModalOpen(true)}>创建项目</Button>
+        <Button onClick={() => dispatch(projectListActions.openProjectModel())}>创建项目</Button>
       </Row>
       <SearchPanel users={users || []} param={param} setParam={setParam} />
       {error ? <Typography.Text type="danger">{error.message}</Typography.Text> : null}
       <Divider />
-      <List
-        loading={isLoading}
-        users={users || []}
-        dataSource={projects || []}
-        setProjectModalOpen={props.setProjectModalOpen}
-      />
+      <List loading={isLoading} users={users || []} dataSource={projects || []} />
     </Container>
   )
 }

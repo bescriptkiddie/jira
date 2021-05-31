@@ -1,11 +1,20 @@
 import React from "react"
 import { Button, Drawer } from "antd"
+import { useDispatch, useSelector } from "react-redux"
+import { projectListActions, selectProjectModalOpen } from "screens/project-list/project-list.slice"
 
-export const ProjectModal = (props: { projectModalOpen: boolean; onClose: () => void }) => {
+export const ProjectModal = () => {
+  const dispatch = useDispatch()
+  // useSelect 是读总的状态树的一个状态的
+  const projectModalOpen = useSelector(selectProjectModalOpen)
   return (
-    <Drawer visible={props.projectModalOpen} onClose={props.onClose} width={"100%"}>
+    <Drawer
+      onClose={() => dispatch(projectListActions.closeProjectModel())}
+      visible={projectModalOpen}
+      width={"100%"}
+    >
       <h1>Project Modal</h1>
-      <Button onClick={props.onClose}>关闭</Button>
+      <Button onClick={() => dispatch(projectListActions.closeProjectModel())}>关闭</Button>
     </Drawer>
   )
 }

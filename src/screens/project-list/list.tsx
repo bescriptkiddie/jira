@@ -5,14 +5,16 @@ import dayjs from "dayjs"
 import { Link } from "react-router-dom"
 import { Star } from "components/stars"
 import { useEidtProject } from "utils/project"
+import { useDispatch } from "react-redux"
+import { projectListActions } from "screens/project-list/project-list.slice"
 
 interface ListProps extends TableProps<Projects> {
   users: Users[]
-  setProjectModalOpen?: (isOpen: boolean) => void
 }
 
 export const List = ({ users, ...props }: ListProps) => {
   const { mutate } = useEidtProject()
+  const dispatch = useDispatch()
   const starProject = (id: number) => (pin: boolean) => {
     mutate({ id, pin })
   }
@@ -69,7 +71,9 @@ export const List = ({ users, ...props }: ListProps) => {
                   <Menu>
                     <Menu.Item key={"layout"}>
                       {/* <span onClick={() => props.setProjectModalOpen}>新建</span> */}
-                      <span onClick={() => props.setProjectModalOpen?.(true)}>编辑</span>
+                      <span onClick={() => dispatch(projectListActions.openProjectModel())}>
+                        编辑
+                      </span>
                     </Menu.Item>
                   </Menu>
                 }
