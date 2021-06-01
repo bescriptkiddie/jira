@@ -19,7 +19,7 @@ export const useProjects = (param?: Partial<Projects>) => {
   return useQuery<Projects[]>(["projects", param], () => http("projects", { data: param }))
 }
 
-export const useEidtProject = () => {
+export const useEditProject = () => {
   const http = useHttp()
   const queryClient = useQueryClient()
   return useMutation(
@@ -52,7 +52,7 @@ export const useAddProject = () => {
   const queryClient = useQueryClient()
   return useMutation(
     (param: Partial<Projects>) =>
-      http(`projects/${param.id}`, {
+      http(`projects`, {
         method: "POST",
         data: param,
       }),

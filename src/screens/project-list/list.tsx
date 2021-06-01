@@ -1,22 +1,23 @@
 import { Dropdown, Menu, Table, TableProps } from "antd"
-import React from "react"
 import { Users, Projects } from "screens/project-list/index"
 import dayjs from "dayjs"
 import { Link } from "react-router-dom"
 import { Star } from "components/stars"
-import { useEidtProject } from "utils/project"
+import { useEditProject } from "utils/project"
 import { useProjectModal } from "./util"
+import React from "react"
+import { ButtonNoPadding } from "components/lib"
 
 interface ListProps extends TableProps<Projects> {
   users: Users[]
 }
 
 export const List = ({ users, ...props }: ListProps) => {
-  const { mutate } = useEidtProject()
+  const { mutate } = useEditProject()
   const starProject = (id: number) => (pin: boolean) => {
     mutate({ id, pin })
   }
-  const { open } = useProjectModal()
+  const { startEdit, open } = useProjectModal()
   return (
     <Table
       rowKey={"id"}
@@ -62,13 +63,14 @@ export const List = ({ users, ...props }: ListProps) => {
         },
         {
           title: "操作",
-          render: () => {
+          render: (project: Projects) => {
             return (
               <Dropdown
                 overlay={
                   <Menu>
-                    <Menu.Item key={"layout"}>
-                      <span onClick={open}>编辑</span>
+                    <Menu.Item key={"layout"} style={{ display: "block" }}>
+                      <ButtonNoPadding onClick={() => startEdit(project.id)}>编辑</ButtonNoPadding>
+                      <ButtonNoPadding onClick={open}>新增</ButtonNoPadding>
                     </Menu.Item>
                   </Menu>
                 }

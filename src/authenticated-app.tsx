@@ -8,7 +8,7 @@ import { Button, Dropdown, Menu } from "antd"
 import { BrowserRouter as Router } from "react-router-dom"
 import { Navigate, Route, Routes } from "react-router"
 import { resetRoute } from "utils"
-import { ProjectModal } from "components/project-modal"
+import { ProjectModal } from "screens/project-list/project-modal"
 import { ProjectPopover } from "components/project-popover"
 
 export const AuthenticationApp = () => {

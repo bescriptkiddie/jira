@@ -6,8 +6,8 @@ import { toNumber } from "components/lib"
 type SelectProps = React.ComponentProps<typeof Select>
 
 interface IdSelectProps extends Omit<SelectProps, "options" | "value" | "onChange"> {
-  value: string | number | null | undefined
-  onChange: (value?: number) => void
+  value?: string | number | null | undefined
+  onChange?: (value?: number) => void
   defaultOptionsName?: string
   options?: { name: string; id: number }[]
 }
@@ -23,7 +23,7 @@ export const IdSelect = (props: IdSelectProps) => {
   return (
     <Select
       value={options?.length ? toNumber(value) : 0}
-      onChange={value => onChange(toNumber(value) || undefined)}
+      onChange={value => onChange?.(toNumber(value) || undefined)}
       {...restProps}
     >
       {defaultOptionsName ? <Select.Option value={0}>{defaultOptionsName}</Select.Option> : null}
