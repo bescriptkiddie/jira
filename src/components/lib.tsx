@@ -34,13 +34,23 @@ export const FullPageErrorFallback = ({ error }: { error: Error | null }) => {
   return (
     <FullPage>
       <DevTools />
-      <Typography.Text type="danger">{error?.message}</Typography.Text>
+      <ErrorBox error={error} />
     </FullPage>
   )
 }
 
 // Select 中格式化 value值
 export const toNumber = (value: unknown) => (isNaN(Number(value)) ? 0 : Number(value))
+
+// 类型守卫 -> 如果 value.message 返回的是true 那么将把value定义为error类型
+const isError = (value: any): value is Error => value?.message
+
+export const ErrorBox = ({ error }: { error: unknown }) => {
+  if (isError(error)) {
+    return <Typography.Text type="danger">{error.message}</Typography.Text>
+  }
+  return null
+}
 
 // 没有 padding 的 button
 export const ButtonNoPadding = styled(Button)`

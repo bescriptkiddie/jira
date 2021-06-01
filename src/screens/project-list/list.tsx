@@ -5,10 +5,10 @@ import dayjs from "dayjs"
 import { Link } from "react-router-dom"
 import { Star } from "components/stars"
 import { useEidtProject } from "utils/project"
+import { useProjectModal } from "./util"
 
 interface ListProps extends TableProps<Projects> {
   users: Users[]
-  setProjectModalOpen?: (isOpen: boolean) => void
 }
 
 export const List = ({ users, ...props }: ListProps) => {
@@ -16,7 +16,7 @@ export const List = ({ users, ...props }: ListProps) => {
   const starProject = (id: number) => (pin: boolean) => {
     mutate({ id, pin })
   }
-
+  const { open } = useProjectModal()
   return (
     <Table
       rowKey={"id"}
@@ -68,8 +68,7 @@ export const List = ({ users, ...props }: ListProps) => {
                 overlay={
                   <Menu>
                     <Menu.Item key={"layout"}>
-                      {/* <span onClick={() => props.setProjectModalOpen}>新建</span> */}
-                      <span onClick={() => props.setProjectModalOpen?.(true)}>编辑</span>
+                      <span onClick={open}>编辑</span>
                     </Menu.Item>
                   </Menu>
                 }

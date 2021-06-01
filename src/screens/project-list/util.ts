@@ -10,3 +10,16 @@ export const useProjectsParams = () => {
     setParam,
   ] as const
 }
+
+export const useProjectModal = () => {
+  const [{ projectCreate }, setProjectCreate] = useUrlQueryParams(["projectCreate"])
+  const open = () => setProjectCreate({ projectCreate: true })
+  const close = () => setProjectCreate({ projectCreate: undefined })
+
+  return {
+    // 因为从url里面获取的是字符串
+    projectModalOpen: projectCreate === "true",
+    open,
+    close,
+  }
+}
